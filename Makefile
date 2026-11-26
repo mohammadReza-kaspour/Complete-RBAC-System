@@ -1,4 +1,4 @@
-.PHONY: build run
+.PHONY: build run dirmap
 
 EXT :=
 ifeq ($(OS),Windows_NT)
@@ -6,11 +6,15 @@ ifeq ($(OS),Windows_NT)
 endif
 
 BIN_DIR := ./bin
+dirmap: 
+	@powershell -NoProfile -Command "Get-ChildItem -Recurse -Name > dirmap.log"
 
-build:
-	@clear
-	@mkdir -p $(BIN_DIR)
-	@go build -o ./bin/main$(EXT) ./Cmd/Main
+build: 	dirmap
+		@clear
+		@mkdir -p $(BIN_DIR)
+		@go build -o ./bin/main$(EXT) ./cmd/server
 
-run: build
-	@./bin/main$(EXT)
+
+run: 	build
+		@./bin/main$(EXT)
+
